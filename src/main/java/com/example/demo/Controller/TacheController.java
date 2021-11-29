@@ -28,13 +28,20 @@ public class TacheController {
 	private TacheRepository tacheRepository ;
 	
 	@PostMapping("/create")
-	public Tache create(Tache tache ){
+	public Tache create(@RequestBody Tache tache ){
 		return tacheRepository.save(tache) ;
 	}
 	
 	@GetMapping("/all")
 	public List<Tache>getall(){
 		return tacheRepository.findAll();
+	}
+	@GetMapping("/get/{id}")
+	public Tache getbyId(@PathVariable int id){
+		Optional<Tache>tache = tacheRepository.findById(id);
+		if (tache.isPresent()) {
+			return tache.get() ; 
+		}throw new ResourceNotFoundException("task inixsist") ;
 	}
 	
 	@GetMapping("/{id}")
@@ -56,6 +63,7 @@ public class TacheController {
 			t.setEtat(tache.getEtat());
 			t.setTache(tache.getTache()) ;
 			t.setTechnicien(tache.getTechnicien());
+			t.setNote(tache.getNote()); 
 			return tacheRepository.save(t);
 		}
 		throw new ResourceNotFoundException("tache inixist");
